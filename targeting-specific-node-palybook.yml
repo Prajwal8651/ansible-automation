@@ -1,0 +1,39 @@
+#========= this are the tasks that will be running on all servers========================================
+- hosts: all
+  become: true
+  tasks:
+
+  - name: install updates (CentOS)
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+#========== this are the tasks that will be running on web_servers only ====================================
+- hosts: web_servers
+  become: true
+  tasks:
+
+  - name: install apache and php for ubuntu servers
+    apt:
+      name:
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install apache and php for CentOS
+    dnf:
+      name:
+        - httpd
+        - php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "CentOS"

@@ -1,3 +1,8 @@
-98.70.40.197 apache_package=apache2 php_package=libapache2-mod-php
-20.197.8.38 apache_package=apache2 php_package=libapache2-mod-php
-57.159.30.57 apache_package=httpd php_package=php
+[web_servers]
+98.70.40.197
+
+[db_servers]
+20.197.8.38
+
+[file_servers]
+57.159.30.57 
