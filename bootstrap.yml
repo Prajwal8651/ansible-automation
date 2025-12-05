@@ -1,0 +1,52 @@
+#========= this are the tasks that will be running on all servers========================================
+- hosts: all
+  become: true
+  pre_tasks:
+# pre_tasks: #   Tasks listed under `pre_tasks` run BEFORE the main `tasks` section.
+#   Common uses:
+#     - Preparing the environment
+#     - Installing prerequisites
+#     - Validating conditions before the main play runs
+#     - Setting facts or variables early
+#   These tasks execute after host selection and fact gathering.
+
+
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      upgrade: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+- hosts: all
+  become: true
+  tasks:
+
+  - name: create prajwal user
+    tags: alwaya
+    user:
+      name: prajwal
+      groups: root
+
+  - name: add ssh key for prajwal
+    tags: always
+    authorized_key:
+      user: prajwal
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIP6Ex1RskU0Gm2pHGFYnqyDS4YAJWwjIcsmZI5VWrqx ansible"
+
+  - name: add sudoers file for prajwal
+    tags: always
+    copy:
+      src: sudoer_prajwal
+      dest: /etc/sudoers.d/prajwal
+      owner: root
+      group: root
+      mode: 0440
+
